@@ -1,0 +1,117 @@
+ CREATE TABLE employee ( emp_id serial PRIMARY KEY, emp_name VARCHAR UNIQUE NOT NULL, phone_number int NOT NULL, email VARCHAR(255) );
+CREATE TABLE
+
+postgres=# INSERT INTO employee ( emp_name, phone_number, email) VALUES('milan', '985', 'mila@gmail.com');
+INSERT 0 1
+
+postgres=# SELECT * FROM employee;
+ emp_id | emp_name | phone_number |     email
+--------+----------+--------------+----------------
+      1 | milan    |          985 | mila@gmail.com
+(1 row)
+
+
+postgres=# SELECT DISTINCT emp_id FROM employee;
+ emp_id
+--------
+      1
+(1 row)
+
+
+postgres=# SELECT DISTINCT emp_id, emp_name FROM employee;
+ emp_id | emp_name
+--------+----------
+      1 | milan
+(1 row)
+
+
+
+
+postgres=# CREATE TABLE distinct_demo ( id serial NOT NULL PRIMARY KEY, bcolor VARCHAR, fcolor VARCHAR );
+CREATE TABLE
+postgres=# \d
+                  List of relations
+ Schema |         Name         |   Type   |  Owner
+--------+----------------------+----------+----------
+ public | account_roles        | table    | postgres
+ public | accounts             | table    | postgres
+ public | accounts_user_id_seq | sequence | postgres
+ public | distinct_demo        | table    | postgres
+ public | distinct_demo_id_seq | sequence | postgres
+ public | employee             | table    | postgres
+ public | employee_emp_id_seq  | sequence | postgres
+ public | roles                | table    | postgres
+ public | roles_role_id_seq    | sequence | postgres
+(9 rows)
+
+
+postgres=# INSERT INTO distinct_demo (bcolor, fcolor) VALUES('red', 'red'), ('red', 'red'), ('red', NULL), (NULL, 'red'), ('red', 'green'), ('red', 'blue'), ('green', 'red'),
+
+postgres-# INSERT INTO distinct_demo (bcolor, fcolor) VALUES('red', 'red'), ('red', 'red'), ('red', NULL), (NULL, 'red'), ('red', 'green'), ('red', 'blue'), ('green', 'red'), ('blue', 'red'), ('green', 'green');
+ERROR:  syntax error at or near "INSERT"
+LINE 6: INSERT INTO distinct_demo (bcolor, fcolor) VALUES('red', 're...
+        ^
+postgres=# INSERT INTO distinct_demo (bcolor, fcolor) VALUES('red', 'red'), ('red', 'red'), ('red', NULL), (NULL, 'red'), ('red', 'green'), ('red', 'blue'), ('green', 'red'), ('blue', 'red'), ('green', 'green');
+INSERT 0 9
+
+
+postgres=# SELECT id, bcolor, fcolor FROM distinct_demo;
+ id | bcolor | fcolor
+----+--------+--------
+  1 | red    | red
+  2 | red    | red
+  3 | red    |
+  4 |        | red
+  5 | red    | green
+  6 | red    | blue
+  7 | green  | red
+  8 | blue   | red
+  9 | green  | green
+(9 rows)
+
+
+postgres=# SELECT DISTINCT bcolor FROM distinct_demo ORDER BY bcolor;
+ bcolor
+--------
+ blue
+ green
+ red
+
+(4 rows)
+
+
+postgres=# SELECT DISTINCT fcolor FROM distinct_demo ORDER BY fcolor;
+ fcolor
+--------
+ blue
+ green
+ red
+
+(4 rows)
+
+
+postgres=# SELECT DISTINCT bcolor, fcolor FROM distinct_demo ORDER BY bcolor, fcolor;
+ bcolor | fcolor
+--------+--------
+ blue   | red
+ green  | green
+ green  | red
+ red    | blue
+ red    | green
+ red    | red
+ red    |
+        | red
+(8 rows)
+
+
+postgres=# SELECT DISTINCT ON (bcolor) bcolor, fcolor FROM distinct_demo ORDER BY bcolor, fcolor;
+ bcolor | fcolor
+--------+--------
+ blue   | red
+ green  | green
+ red    | blue
+        | red
+(4 rows)
+
+
+
